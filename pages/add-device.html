@@ -8,14 +8,14 @@
 </head>
 <body>
 <header>
-  <h1>IT Store - Add Device</h1>
+  <h1>Add Device</h1>
 </header>
 
 <div class="container">
   <form id="addDeviceForm">
     <label for="deviceType">Device Type</label>
     <select id="deviceType" required>
-      <option value="" disabled selected>اختر النوع</option>
+      <option value="" disabled selected>Choose type</option>
       <option>Laptop</option>
       <option>Screen</option>
       <option>PC</option>
@@ -29,69 +29,41 @@
 
     <label for="brand">Brand</label>
     <select id="brand" required>
-      <option value="" disabled selected>Dell / HP / Fujitsu / Lenovo / Samsung / أخرى</option>
+      <option value="" disabled selected>Dell / HP / Fujitsu / Lenovo / Samsung / Other</option>
       <option>Dell</option>
       <option>HP</option>
       <option>Fujitsu</option>
       <option>Lenovo</option>
       <option>Samsung</option>
-      <option>أخرى</option>
+      <option>Other</option>
     </select>
 
     <label for="model">Model</label>
-    <input id="model" type="text" placeholder="ادخل الموديل">
+    <input id="model" type="text" placeholder="Enter model">
 
     <label for="serial">Serial Number</label>
-    <input id="serial" type="text" placeholder="ادخل الرقم التسلسلي">
+    <input id="serial" type="text" placeholder="Enter serial">
 
     <label for="mac">MAC Address</label>
-    <input id="mac" type="text" placeholder="ادخل MAC">
+    <input id="mac" type="text" placeholder="Enter MAC">
 
     <label for="status">Status</label>
     <select id="status" required>
-      <option value="" disabled selected>اختر</option>
+      <option value="" disabled selected>Choose</option>
       <option>Available</option>
       <option>In Stock</option>
       <option>Assigned</option>
       <option>Out of Stock</option>
     </select>
 
-    <label for="enteredBy">Data Entered By</label>
-    <input id="enteredBy" type="text" placeholder="اسم من يدخل البيانات">
+    <label for="enteredBy">Entered By</label>
+    <input id="enteredBy" type="text" placeholder="Your name">
 
     <button type="submit" class="btn">Add Device</button>
     <button type="button" id="clearBtn" class="btn outline">Clear</button>
   </form>
 </div>
 
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-  const form = document.getElementById('addDeviceForm');
-  const clearBtn = document.getElementById('clearBtn');
-
-  form.addEventListener('submit', e => {
-    e.preventDefault();
-    const device = {
-      deviceType: document.getElementById('deviceType').value,
-      brand: document.getElementById('brand').value,
-      model: document.getElementById('model').value,
-      serial: document.getElementById('serial').value,
-      mac: document.getElementById('mac').value,
-      status: document.getElementById('status').value,
-      enteredBy: document.getElementById('enteredBy').value,
-      timestamp: new Date().toLocaleString()
-    };
-    const data = JSON.parse(localStorage.getItem('itstore_devices') || '[]');
-    data.push(device);
-    localStorage.setItem('itstore_devices', JSON.stringify(data));
-    alert('Device added successfully!');
-    form.reset();
-  });
-
-  clearBtn.addEventListener('click', () => {
-    form.reset();
-  });
-});
-</script>
+<script src="../assets/js/scripts.js"></script>
 </body>
 </html>
