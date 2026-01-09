@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IT Store - Device Delivery</title>
+<link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+<header>
+  <h1>IT Store - Device Delivery</h1>
+</header>
+
+<div class="container">
+  <form id="deliveryForm">
+    <label for="deliveryTo">Delivered To</label>
+    <input id="deliveryTo" type="text" placeholder="Recipient Name" required>
+
+    <label for="deliveryDate">Delivery Date</label>
+    <input id="deliveryDate" type="date" required>
+
+    <label for="deviceSerial">Serial / Model</label>
+    <input id="deviceSerial" type="text" placeholder="Serial Number or Model">
+
+    <label for="condition">Condition</label>
+    <select id="condition" required>
+      <option value="" disabled selected>Choose</option>
+      <option>New</option>
+      <option>Good</option>
+      <option>Damaged</option>
+    </select>
+
+    <label for="deliveredBy">Delivered By</label>
+    <input id="deliveredBy" type="text" placeholder="Delivered By">
+
+    <label for="notes">Notes</label>
+    <textarea id="notes" rows="3" placeholder="Additional Notes"></textarea>
+
+    <button type="submit" class="btn">Submit Delivery</button>
+    <button type="button" id="clearBtn" class="btn outline">Clear</button>
+  </form>
+
+  <section>
+    <h3>Delivery Records</h3>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Recipient</th>
+          <th>Date</th>
+          <th>Serial / Model</th>
+          <th>Condition</th>
+          <th>Delivered By</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody id="deliveryRows"></tbody>
+    </table>
+  </section>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.getElementById('deliveryForm');
+  const rows = document.getElementById('deliveryRows');
+  const clearBtn = document.getElementById('clearBtn');
+
+  const storedDeliveries = JSON.parse(localStorage.getItem('itstore_deliveries') || '[]');
+
+  function renderDeliveries() {
+    rows.innerHTML = '';
+    if(storedDeliveries.length === 0){
+      rows.innerHTML = '<tr><td colspan="6" class="empty">No deliveries yet</td></tr>';
+    } else {
+      storedDeliveries.forEach(d => {
+        rows.innerHTML += `
+          <tr>
+            <td>${d.deliveryTo}</td>
+            <td>${d.deliveryDate}</td>
+            <td>${d.deviceSerial}</td>
+            <td>${d.condition}</td>
+            <td>${d.deliveredBy}</td>
+            <td>${d.notes}</td>
+          </tr>
+        `;
+      });
+    }
+  }
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const delivery = {
+      deliveryTo: document.getElementById('deliveryTo').value,
+      deliveryDate: document.getElementById('deliveryDate').value,
+      deviceSerial: document.getElementById('deviceSerial').value,
+      condition: document.getElementById('condition').value,
+      deliveredBy: document.getElementById('deliveredBy').value,
+      notes: document.getElementById('notes').value
+    };
+    storedDeliveries.push(delivery);
+    localStorage.setItem('itstore_deliveries', JSON.stringify(storedDeliveries));
+    renderDeliveries();
+    form.reset();
+  });
+
+  clearBtn.addEventListener('click', () => form.reset());
+
+  renderDeliveries();
+});
+</script>
+</body>
+</html>
