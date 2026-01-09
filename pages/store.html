@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IT Store - Store</title>
+<link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+<header>
+  <h1>IT Store - Store</h1>
+</header>
+
+<div class="container">
+  <h2>IT Inventory Store</h2>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Device Type</th>
+        <th>Brand</th>
+        <th>Model</th>
+        <th>Serial</th>
+        <th>MAC</th>
+        <th>Status</th>
+        <th>Entered By</th>
+        <th>Timestamp</th>
+      </tr>
+    </thead>
+    <tbody id="storeRows"></tbody>
+  </table>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const rowsEl = document.getElementById('storeRows');
+  const devices = JSON.parse(localStorage.getItem('itstore_devices') || '[]');
+
+  function renderStore() {
+    rowsEl.innerHTML = '';
+    if(devices.length === 0) {
+      rowsEl.innerHTML = '<tr><td colspan="8" class="empty">No devices added yet. Use Add Device page to add items.</td></tr>';
+      return;
+    }
+    devices.forEach(d => {
+      rowsEl.innerHTML += `
+        <tr>
+          <td>${d.deviceType || ''}</td>
+          <td>${d.brand || ''}</td>
+          <td>${d.model || ''}</td>
+          <td>${d.serial || ''}</td>
+          <td>${d.mac || ''}</td>
+          <td>${d.status || ''}</td>
+          <td>${d.enteredBy || ''}</td>
+          <td>${d.timestamp || ''}</td>
+        </tr>
+      `;
+    });
+  }
+
+  renderStore();
+});
+</script>
+
+</body>
+</html>
