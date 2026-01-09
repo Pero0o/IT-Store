@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IT Store - Login</title>
+  <link rel="stylesheet" href="../assets/css/styles.css">
+</head>
+<body>
+
+<header>
+  <h1>IT Store - Login</h1>
+</header>
+
+<div class="container">
+  <form id="loginForm">
+    <label for="email">Email</label>
+    <input type="email" id="email" name="email" placeholder="Enter your email" required>
+
+    <label for="password">Password</label>
+    <input type="password" id="password" name="password" placeholder="Enter your password" required>
+
+    <button type="submit" class="btn">Login</button>
+  </form>
+  <p class="note">Note: This is a local demo login. Later you can connect it to real authentication.</p>
+</div>
+
+<footer class="footer">
+  © 2026 IT Store - All rights reserved
+</footer>
+
+<script>
+  // Local demo login
+  document.getElementById('loginForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const email = document.getElementById('email').value;
+    const pass = document.getElementById('password').value;
+    if(email && pass){
+      localStorage.setItem('itstore_user', JSON.stringify({email}));
+      window.location.href = '../index.html';
+    }
+  });
+</script>
+
+</body>
+</html>
