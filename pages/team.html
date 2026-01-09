@@ -7,37 +7,58 @@
 <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 <body>
-<header>
-  <h1>IT Store - Team</h1>
-</header>
-
 <div class="container">
-  <section id="team" class="grid">
-    <div class="card member">
-      <h3>Member Name 1</h3>
-      <p>Role: Admin</p>
-      <p>Email: admin@example.com</p>
-    </div>
+  <h1>Team Members</h1>
+  <form id="teamForm">
+    <label for="name">Name</label>
+    <input type="text" id="name" placeholder="Enter name" required>
 
-    <div class="card member">
-      <h3>Member Name 2</h3>
-      <p>Role: Editor</p>
-      <p>Email: editor@example.com</p>
-    </div>
+    <label for="role">Role</label>
+    <input type="text" id="role" placeholder="Enter role" required>
 
-    <div class="card member">
-      <h3>Member Name 3</h3>
-      <p>Role: Viewer</p>
-      <p>Email: viewer@example.com</p>
-    </div>
+    <button type="submit" class="btn">Add Member</button>
+    <button type="button" id="clearBtn" class="btn outline">Clear</button>
+  </form>
 
-    <!-- Add more team members as needed -->
-  </section>
+  <h3>Team List</h3>
+  <table class="table" id="teamTable">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Role</th>
+      </tr>
+    </thead>
+    <tbody id="teamRows"></tbody>
+  </table>
 </div>
 
 <script>
-// Placeholder: can later fetch team info from Google Sheets or API
-</script>
+const teamForm = document.getElementById('teamForm');
+const teamRows = document.getElementById('teamRows');
+const team = JSON.parse(localStorage.getItem('itstore_team') || '[]');
 
+function renderTeam(){
+  teamRows.innerHTML = '';
+  team.forEach(m => {
+    teamRows.innerHTML += `<tr><td>${m.name}</td><td>${m.role}</td></tr>`;
+  });
+}
+
+teamForm.addEventListener('submit', e => {
+  e.preventDefault();
+  const member = {
+    name: document.getElementById('name').value,
+    role: document.getElementById('role').value
+  };
+  team.push(member);
+  localStorage.setItem('itstore_team', JSON.stringify(team));
+  renderTeam();
+  teamForm.reset();
+});
+
+document.getElementById('clearBtn').addEventListener('click', () => teamForm.reset());
+
+renderTeam();
+</script>
 </body>
 </html>
