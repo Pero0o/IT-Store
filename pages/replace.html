@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IT Store - Replace Device</title>
+<link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+<header>
+  <h1>IT Store - Replace Device</h1>
+</header>
+
+<div class="container">
+  <form id="replaceForm">
+    <label for="oldSerial">Old Device Serial</label>
+    <input id="oldSerial" type="text" placeholder="Enter old serial" required>
+
+    <label for="newDeviceType">New Device Type</label>
+    <select id="newDeviceType" required>
+      <option value="" disabled selected>Choose type</option>
+      <option>Laptop</option>
+      <option>Screen</option>
+      <option>PC</option>
+      <option>Mouse</option>
+      <option>Keyboard</option>
+      <option>Backpack</option>
+      <option>Power Strip</option>
+      <option>Printer</option>
+      <option>Router</option>
+    </select>
+
+    <label for="newBrand">Brand</label>
+    <select id="newBrand" required>
+      <option value="" disabled selected>Dell / HP / Fujitsu / Lenovo / Samsung / Other</option>
+      <option>Dell</option>
+      <option>HP</option>
+      <option>Fujitsu</option>
+      <option>Lenovo</option>
+      <option>Samsung</option>
+      <option>Other</option>
+    </select>
+
+    <label for="newModel">New Model</label>
+    <input id="newModel" type="text" placeholder="New device model">
+
+    <label for="replacementDate">Replacement Date</label>
+    <input id="replacementDate" type="date" required>
+
+    <label for="replaceBy">Replaced By</label>
+    <input id="replaceBy" type="text" placeholder="Person responsible">
+
+    <button type="submit" class="btn">Submit Replacement</button>
+    <button type="button" id="clearReplace" class="btn outline">Clear</button>
+  </form>
+
+  <section>
+    <h3>Replacement Records</h3>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Old Serial</th>
+          <th>New Device Type</th>
+          <th>Brand</th>
+          <th>Model</th>
+          <th>Date</th>
+          <th>Replaced By</th>
+        </tr>
+      </thead>
+      <tbody id="replaceRows"></tbody>
+    </table>
+  </section>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.getElementById('replaceForm');
+  const rows = document.getElementById('replaceRows');
+  const clearBtn = document.getElementById('clearReplace');
+
+  const storedReplacements = JSON.parse(localStorage.getItem('itstore_replacements') || '[]');
+
+  function renderReplacements() {
+    rows.innerHTML = '';
+    if(storedReplacements.length === 0){
+      rows.innerHTML = '<tr><td colspan="6" class="empty">No replacements yet</td></tr>';
+    } else {
+      storedReplacements.forEach(r => {
+        rows.innerHTML += `
+          <tr>
+            <td>${r.oldSerial}</td>
+            <td>${r.newDeviceType}</td>
+            <td>${r.newBrand}</td>
+            <td>${r.newModel}</td>
+            <td>${r.replacementDate}</td>
+            <td>${r.replaceBy}</td>
+          </tr>
+        `;
+      });
+    }
+  }
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const replacement = {
+      oldSerial: document.getElementById('oldSerial').value,
+      newDeviceType: document.getElementById('newDeviceType').value,
+      newBrand: document.getElementById('newBrand').value,
+      newModel: document.getElementById('newModel').value,
+      replacementDate: document.getElementById('replacementDate').value,
+      replaceBy: document.getElementById('replaceBy').value
+    };
+    storedReplacements.push(replacement);
+    localStorage.setItem('itstore_replacements', JSON.stringify(storedReplacements));
+    renderReplacements();
+    form.reset();
+  });
+
+  clearBtn.addEventListener('click', () => form.reset());
+
+  renderReplacements();
+});
+</script>
+</body>
+</html>
