@@ -7,20 +7,17 @@
 <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 <body>
-<header>
-  <h1>IT Store - Device Delivery</h1>
-</header>
-
 <div class="container">
+  <h1>Device Delivery</h1>
   <form id="deliveryForm">
-    <label for="deliveryTo">Delivered To</label>
-    <input id="deliveryTo" type="text" placeholder="Recipient Name" required>
+    <label for="deliveryTo">To</label>
+    <input type="text" id="deliveryTo" placeholder="Recipient Name" required>
 
-    <label for="deliveryDate">Delivery Date</label>
-    <input id="deliveryDate" type="date" required>
+    <label for="deliveryDate">Date</label>
+    <input type="date" id="deliveryDate" required>
 
     <label for="deviceSerial">Serial / Model</label>
-    <input id="deviceSerial" type="text" placeholder="Serial Number or Model">
+    <input type="text" id="deviceSerial" placeholder="Serial or Model">
 
     <label for="condition">Condition</label>
     <select id="condition" required>
@@ -31,81 +28,71 @@
     </select>
 
     <label for="deliveredBy">Delivered By</label>
-    <input id="deliveredBy" type="text" placeholder="Delivered By">
+    <input type="text" id="deliveredBy" placeholder="Sender Name">
 
     <label for="notes">Notes</label>
-    <textarea id="notes" rows="3" placeholder="Additional Notes"></textarea>
+    <textarea id="notes" rows="3" placeholder="Any notes"></textarea>
 
     <button type="submit" class="btn">Submit Delivery</button>
     <button type="button" id="clearBtn" class="btn outline">Clear</button>
   </form>
 
-  <section>
-    <h3>Delivery Records</h3>
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Recipient</th>
-          <th>Date</th>
-          <th>Serial / Model</th>
-          <th>Condition</th>
-          <th>Delivered By</th>
-          <th>Notes</th>
-        </tr>
-      </thead>
-      <tbody id="deliveryRows"></tbody>
-    </table>
-  </section>
+  <h3>Delivery Records (Local Storage)</h3>
+  <table class="table" id="deliveryTable">
+    <thead>
+      <tr>
+        <th>To</th>
+        <th>Date</th>
+        <th>Serial/Model</th>
+        <th>Condition</th>
+        <th>Delivered By</th>
+        <th>Notes</th>
+      </tr>
+    </thead>
+    <tbody id="deliveryRows"></tbody>
+  </table>
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', () => {
-  const form = document.getElementById('deliveryForm');
-  const rows = document.getElementById('deliveryRows');
-  const clearBtn = document.getElementById('clearBtn');
+const form = document.getElementById('deliveryForm');
+const rows = document.getElementById('deliveryRows');
+const storedDeliveries = JSON.parse(localStorage.getItem('itstore_deliveries') || '[]');
 
-  const storedDeliveries = JSON.parse(localStorage.getItem('itstore_deliveries') || '[]');
-
-  function renderDeliveries() {
-    rows.innerHTML = '';
-    if(storedDeliveries.length === 0){
-      rows.innerHTML = '<tr><td colspan="6" class="empty">No deliveries yet</td></tr>';
-    } else {
-      storedDeliveries.forEach(d => {
-        rows.innerHTML += `
-          <tr>
-            <td>${d.deliveryTo}</td>
-            <td>${d.deliveryDate}</td>
-            <td>${d.deviceSerial}</td>
-            <td>${d.condition}</td>
-            <td>${d.deliveredBy}</td>
-            <td>${d.notes}</td>
-          </tr>
-        `;
-      });
-    }
-  }
-
-  form.addEventListener('submit', e => {
-    e.preventDefault();
-    const delivery = {
-      deliveryTo: document.getElementById('deliveryTo').value,
-      deliveryDate: document.getElementById('deliveryDate').value,
-      deviceSerial: document.getElementById('deviceSerial').value,
-      condition: document.getElementById('condition').value,
-      deliveredBy: document.getElementById('deliveredBy').value,
-      notes: document.getElementById('notes').value
-    };
-    storedDeliveries.push(delivery);
-    localStorage.setItem('itstore_deliveries', JSON.stringify(storedDeliveries));
-    renderDeliveries();
-    form.reset();
+function renderDeliveries(){
+  rows.innerHTML = '';
+  storedDeliveries.forEach(d => {
+    rows.innerHTML += `
+      <tr>
+        <td>${d.deliveryTo}</td>
+        <td>${d.deliveryDate}</td>
+        <td>${d.deviceSerial}</td>
+        <td>${d.condition}</td>
+        <td>${d.deliveredBy}</td>
+        <td>${d.notes}</td>
+      </tr>`;
   });
+}
 
-  clearBtn.addEventListener('click', () => form.reset());
-
+form.addEventListener('submit', e => {
+  e.preventDefault();
+  const item = {
+    deliveryTo: document.getElementById('deliveryTo').value,
+    deliveryDate: document.getElementById('deliveryDate').value,
+    deviceSerial: document.getElementById('deviceSerial').value,
+    condition: document.getElementById('condition').value,
+    deliveredBy: document.getElementById('deliveredBy').value,
+    notes: document.getElementById('notes').value
+  };
+  storedDeliveries.push(item);
+  localStorage.setItem('itstore_deliveries', JSON.stringify(storedDeliveries));
   renderDeliveries();
+  form.reset();
+  alert('Delivery record saved!');
 });
+
+document.getElementById('clearBtn').addEventListener('click', () => form.reset());
+
+renderDeliveries();
 </script>
 </body>
 </html>
